@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using dxDD2RenPy.Helpers;
-using Newtonsoft.Json;
 
 namespace dxDD2RenPy.Convert
 {
@@ -69,6 +66,11 @@ namespace dxDD2RenPy.Convert
 		{
 			var labelNodes = m_Object.nodes.Where(n => n.InputsCount > 1);
 			int written = 0;
+
+			foreach (var varKey in m_Object.variables.Keys)
+			{
+				m_Manager.ProcessVariable(varKey, m_Object.variables[varKey]);
+			}
 
 			using (m_Writer = new StatStreamWriter(m_OutputFile))
 			{
@@ -215,6 +217,8 @@ namespace dxDD2RenPy.Convert
 				else
 				{
 					written += m_Writer.WriteLine($"{padding}{character} \"{curText}\"");
+
+					m_Manager.ProcessCharacter(character);
 				}
 			} 
 			else
@@ -383,9 +387,9 @@ namespace dxDD2RenPy.Convert
 
 			written += m_Writer.WriteLine($"{pad}$ {node.CounterName} = 0");
 			written += m_Writer.WriteLine($"{pad}while {node.CounterName} < {node.value}:");
+			written += m_Writer.WriteLine($"{GetPadding(level + 1)}$ {node.CounterName} += 1");
 
 			written += ProcessNode(m_Object.GetNode(node.next), level + 1, prevIsBox);
-			written += m_Writer.WriteLine($"{GetPadding(level + 1)}$ {node.CounterName} += 1");
 
 			nextNode = m_Object.GetNode(node.next_done);
 			return written;

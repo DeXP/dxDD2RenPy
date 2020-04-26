@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using dxDD2RenPy.Convert;
+using dxDD2RenPy.Helpers;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace dxDD2RenPy
 {
-	public class MainWindow : Window
+	public class MainWindow : Window, ILogLiner
 	{
 		private TextBox m_InputFileEdit;
 		private TextBox m_Log;
@@ -62,7 +63,7 @@ namespace dxDD2RenPy
 			}
 
 			AppendLogLine($"Entry point: {m_InputFileEdit.Text}");
-			new Manager(this).ProcessFile(m_InputFileEdit.Text);
+			new Manager(this).ProcessAll(m_InputFileEdit.Text);
 		}
 	}
 }

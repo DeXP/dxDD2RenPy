@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dxDD2RenPy", "dxDD2RenPy\dxDD2RenPy.csproj", "{BF835F05-2D0B-45FF-9260-3F21A9CF42F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dxDD2RenPy", "dxDD2RenPy\dxDD2RenPy.csproj", "{BF835F05-2D0B-45FF-9260-3F21A9CF42F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dxDD2RenPy-Console", "dxDD2RenPy-Console\dxDD2RenPy-Console.csproj", "{207BCA46-A527-427E-9017-BCFCC87F37F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dxDD2RenPy-Common", "dxDD2RenPy-Common\dxDD2RenPy-Common.csproj", "{0C3BED5A-7F0D-437A-8BCE-499C41A55A2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{BF835F05-2D0B-45FF-9260-3F21A9CF42F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF835F05-2D0B-45FF-9260-3F21A9CF42F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF835F05-2D0B-45FF-9260-3F21A9CF42F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{207BCA46-A527-427E-9017-BCFCC87F37F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{207BCA46-A527-427E-9017-BCFCC87F37F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{207BCA46-A527-427E-9017-BCFCC87F37F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{207BCA46-A527-427E-9017-BCFCC87F37F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C3BED5A-7F0D-437A-8BCE-499C41A55A2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C3BED5A-7F0D-437A-8BCE-499C41A55A2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C3BED5A-7F0D-437A-8BCE-499C41A55A2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C3BED5A-7F0D-437A-8BCE-499C41A55A2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
