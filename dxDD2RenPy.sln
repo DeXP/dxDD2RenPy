@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dxDD2RenPy", "dxDD2RenPy\dxDD2RenPy.csproj", "{BF835F05-2D0B-45FF-9260-3F21A9CF42F3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BF835F05-2D0B-45FF-9260-3F21A9CF42F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF835F05-2D0B-45FF-9260-3F21A9CF42F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF835F05-2D0B-45FF-9260-3F21A9CF42F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF835F05-2D0B-45FF-9260-3F21A9CF42F3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A9090CCB-24F6-4D88-AC9C-08A10F5030CC}
+	EndGlobalSection
+EndGlobal
