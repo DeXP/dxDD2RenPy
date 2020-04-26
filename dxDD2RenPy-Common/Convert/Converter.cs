@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 using dxDD2RenPy.Helpers;
 
 namespace dxDD2RenPy.Convert
@@ -10,7 +11,7 @@ namespace dxDD2RenPy.Convert
 		private Manager m_Manager;
 
 		private DDObject m_Object;
-		private DDNode m_CurrentRootNode;
+		private HashSet<string> m_ProcessingLoops = new HashSet<string>();
 
 		private string m_OutputFolder;
 		private string m_OutputFile;
@@ -76,9 +77,8 @@ namespace dxDD2RenPy.Convert
 			{
 				written += WriteHeader();
 
-				m_CurrentRootNode = m_Object.StartNode;
-				written += m_Writer.WriteLine($"label {m_CurrentRootNode.StartName}:");
-				written += ProcessNode(m_CurrentRootNode);
+				written += m_Writer.WriteLine($"label {m_Object.StartNode.StartName}:");
+				written += ProcessNode(m_Object.StartNode);
 
 				foreach (var node in labelNodes)
 				{
@@ -87,7 +87,6 @@ namespace dxDD2RenPy.Convert
 					written += WriteSetNvlMode(false, 1);
 
 					DDNode nextNode = null;
-					m_CurrentRootNode = node;
 					written += ProcessSingleNode(node, ref nextNode);
 					written += ProcessNode(nextNode);
 				}
@@ -143,12 +142,14 @@ namespace dxDD2RenPy.Convert
 
 			if ((null != curNode) && (curNode.InputsCount > 1))
 			{
-				bool loopJump = curNode.node_type.Equals("repeat") && (curNode == m_CurrentRootNode);
+				bool initLoop = curNode.node_type.Equals("repeat") && (false == m_ProcessingLoops.Contains(curNode.node_name));
 
-				if (false == loopJump)
+				if (initLoop)
 				{
-					written += JumpNode(curNode, level);
+					written += m_Writer.WriteLine($"{GetPadding(level)}$ {curNode.CounterName} = 0");
 				}
+				
+				written += JumpNode(curNode, level);
 			}
 
 			return written;
@@ -319,7 +320,8 @@ namespace dxDD2RenPy.Convert
 				return 0;
 			}
 
-			if (node.branches is Newtonsoft.Json.Linq.JObject branches) {
+			if (node.branches is Newtonsoft.Json.Linq.JObject branches)
+			{
 				string padding = GetPadding(level);
 				bool conditionWritten = false;
 				int written = 0;
@@ -382,16 +384,24 @@ namespace dxDD2RenPy.Convert
 				return 0;
 			}
 
+			if (false == m_ProcessingLoops.Contains(node.node_name))
+			{
+				m_ProcessingLoops.Add(node.node_name);
+			}
+
 			int written = 0;
 			string pad = GetPadding(level);
 
-			written += m_Writer.WriteLine($"{pad}$ {node.CounterName} = 0");
+			//written += m_Writer.WriteLine($"{pad}$ {node.CounterName} = 0");
 			written += m_Writer.WriteLine($"{pad}while {node.CounterName} < {node.value}:");
 			written += m_Writer.WriteLine($"{GetPadding(level + 1)}$ {node.CounterName} += 1");
 
 			written += ProcessNode(m_Object.GetNode(node.next), level + 1, prevIsBox);
 
 			nextNode = m_Object.GetNode(node.next_done);
+
+			m_ProcessingLoops.Remove(node.node_name);
+
 			return written;
 		}
 

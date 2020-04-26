@@ -147,7 +147,10 @@ namespace dxDD2RenPy.Convert
 			m_Owner = owner;
 
 			m_InputsCount = owner.nodes.Count(n => this.node_name.Equals(n.next))
-				+ owner.nodes.Count(n => n.choices?.Any(c => this.node_name.Equals(c.next)) ?? false);
+				+ owner.nodes.Count(n => n.choices?.Any(c => this.node_name.Equals(c.next)) ?? false)
+				+ owner.nodes.Count(n => (n.branches as Newtonsoft.Json.Linq.JObject)?.Children()
+					.Any(c => this.node_name.Equals(c.First().ToString())) ?? false)
+			;
 		}
 	}
 
