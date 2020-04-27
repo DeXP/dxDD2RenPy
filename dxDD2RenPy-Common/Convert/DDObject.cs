@@ -67,8 +67,15 @@ namespace dxDD2RenPy.Convert
 		public Object text { get; set; }
 		public IList<DDChoice> choices { get; set; }
 
-		private int m_InputsCount;
+		/// <summary>
+		/// Owner object (document) of a current node. Required mainly for nodes lookup
+		/// </summary>
 		private DDObject m_Owner;
+
+		/// <summary>
+		/// Helper property to know how many nodes reference the current one
+		/// </summary>
+		public int InputsCount { get; private set; }
 
 		public string StartName
 		{
@@ -102,19 +109,33 @@ namespace dxDD2RenPy.Convert
 			}
 		}
 
-		public int InputsCount
+		/// <summary>
+		/// Helper property to get next Node, but not it's ID
+		/// </summary>
+		public DDNode NextNode
 		{
-			get 
+			get
 			{
-				return m_InputsCount;
+				return m_Owner.GetNode(next);
 			}
 		}
 
+		/// <summary>
+		/// Escapes quotes from the string
+		/// </summary>
+		/// <param name="text">Input string</param>
+		/// <returns>Escaped string</returns>
 		public string EscapeString(string text)
 		{
 			return text.Replace("\"", @"\""");
 		}
 
+
+		/// <summary>
+		/// Gets Raw text and escapes the quotes inside to directly output the text.
+		/// </summary>
+		/// <param name="textObject">Object to get text from</param>
+		/// <returns>Text string</returns>
 		public string GetText(Object textObject)
 		{
 			var text = GetRawText(textObject);
@@ -122,6 +143,13 @@ namespace dxDD2RenPy.Convert
 			return EscapeString(text);
 		}
 
+		/// <summary>
+		/// Gets one string of text for the object.
+		/// It tries to respect selected language of the document.
+		/// Returns first string if the language not persists.
+		/// </summary>
+		/// <param name="textObject">Object to get text from</param>
+		/// <returns>Text string</returns>
 		public string GetRawText(Object textObject)
 		{
 			if (textObject is Newtonsoft.Json.Linq.JObject jobj)
@@ -142,15 +170,19 @@ namespace dxDD2RenPy.Convert
 			return textObject.ToString();
 		}
 
+		/// <summary>
+		/// Initialize node. Main outcome is count of inputs to the node. 
+		/// It is summary count of nodes, choices and branches who have curret node as a next one.
+		/// </summary>
+		/// <param name="owner"></param>
 		public void Init(DDObject owner)
 		{
 			m_Owner = owner;
 
-			m_InputsCount = owner.nodes.Count(n => this.node_name.Equals(n.next))
-				+ owner.nodes.Count(n => n.choices?.Any(c => this.node_name.Equals(c.next)) ?? false)
+			InputsCount = owner.nodes.Count(n => node_name.Equals(n.next))
+				+ owner.nodes.Count(n => n.choices?.Any(c => node_name.Equals(c.next)) ?? false)
 				+ owner.nodes.Count(n => (n.branches as Newtonsoft.Json.Linq.JObject)?.Children()
-					.Any(c => this.node_name.Equals(c.First().ToString())) ?? false)
-			;
+					.Any(c => node_name.Equals(c.First().ToString())) ?? false);
 		}
 	}
 
@@ -165,8 +197,14 @@ namespace dxDD2RenPy.Convert
 		public IList<DDNode> nodes { get; set; }
 		public IDictionary<string, DDVariable> variables { get; set; }
 
+		/// <summary>
+		/// nodeId-DDNode lookup for fast getting nodes by ID
+		/// </summary>
 		private Dictionary<string, DDNode> m_NodesLookup;
 
+		/// <summary>
+		/// Helper property to get starting node faster
+		/// </summary>
 		public DDNode StartNode
 		{
 			get
@@ -175,6 +213,9 @@ namespace dxDD2RenPy.Convert
 			}
 		}
 
+		/// <summary>
+		/// Initialize the object. Required after load
+		/// </summary>
 		public void Init()
 		{
 			foreach (var node in this.nodes)
@@ -185,21 +226,31 @@ namespace dxDD2RenPy.Convert
 			m_NodesLookup = this.nodes.ToDictionary(n => n.node_name);
 		}
 
-		public DDNode GetNode(string key)
+		/// <summary>
+		/// Helper function to convert string nodeId to DDNode object
+		/// </summary>
+		/// <param name="nodeId">ID of the node you want to find</param>
+		/// <returns>null if there is no such object</returns>
+		public DDNode GetNode(string nodeId)
 		{
-			if (string.IsNullOrEmpty(key))
+			if (string.IsNullOrEmpty(nodeId))
 			{
 				return null;
 			}
 
-			if (m_NodesLookup.ContainsKey(key))
+			if (m_NodesLookup.ContainsKey(nodeId))
 			{
-				return m_NodesLookup[key];
+				return m_NodesLookup[nodeId];
 			}
 
 			return null;
 		}
 
+		/// <summary>
+		/// Loads the Dialogue Designer object from disk
+		/// </summary>
+		/// <param name="path">Full path to the file</param>
+		/// <returns>null if file is wrong</returns>
 		public static DDObject Load(string path)
 		{
 			using (StreamReader file = File.OpenText(path))
@@ -210,6 +261,61 @@ namespace dxDD2RenPy.Convert
 
 				return ddList.FirstOrDefault();
 			}
+		}
+
+		/// <summary>
+		/// Checks if findNode belongs to loop started with loopNode
+		/// </summary>
+		/// <param name="findNode">Node you want to check</param>
+		/// <param name="loopNode">In which loop findNode should be</param>
+		/// <param name="curNode">Recursion node. Equals to loopNode on a first invokation</param>
+		/// <param name="firstMet">Parameter required to stop the search on second met (when the loop was processed by reccusrion)</param>
+		/// <returns>Boolen, was findNode found in the loopNode</returns>
+		public bool IsNodeInLoop(DDNode findNode, DDNode loopNode, DDNode curNode, bool firstMet = true)
+		{
+			if ((null == curNode) || (null == findNode) || (null == loopNode))
+			{
+				return false;
+			}
+
+			if ((false == firstMet) && (curNode == loopNode))
+			{
+				return false;
+			}
+
+			if (curNode == findNode)
+			{
+				return true;
+			}
+
+			if (IsNodeInLoop(findNode, loopNode, curNode.NextNode, false))
+			{
+				return true;
+			}
+
+			if ((null != curNode.choices) && (curNode.choices.Count() > 0))
+			{
+				foreach (var choice in curNode.choices)
+				{
+					if (IsNodeInLoop(findNode, loopNode, GetNode(choice.next), false))
+					{
+						return true;
+					}
+				}
+			}
+
+			if (curNode.branches is Newtonsoft.Json.Linq.JObject branches)
+			{
+				foreach(var branch in branches)
+				{
+					if (IsNodeInLoop(findNode, loopNode, GetNode(branch.Value.ToString()), false))
+					{
+						return true;
+					}
+				}
+			}
+
+			return false;
 		}
 	}
 }

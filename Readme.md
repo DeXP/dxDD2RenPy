@@ -1,6 +1,8 @@
 # dxDD2RenPy
 dxDD2RenPy is a tool to convert DialogueDesigner JSON file into Ren'Py code.
 
+![dxDD2RenPy screenshot](https://raw.githubusercontent.com/DeXP/dxDD2RenPy/master/info/screenshot.png)
+
 ## Get the tool:
 Download latest release: <https://github.com/DeXP/dxDD2RenPy/releases/latest>
 
