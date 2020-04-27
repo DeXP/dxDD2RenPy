@@ -8,17 +8,10 @@ Download latest release:
 <https://github.com/DeXP/dxDD2RenPy/releases/latest>
 
 ## Tutorial and support
-Tutorial how to use the tool is located on Steam:
-<https://steamcommunity.com/sharedfiles/filedetails/?id=2074605023>
-
-Support Steam-thread:
-<https://steamcommunity.com/app/1273620/discussions/0/2262439317604694498/>
-
-You can get more complicated example here: 
-<https://github.com/DeXP/dxDD2RenPy_Example>
-
-Or even run this example online:
-<https://dexp.github.io/dxDD2RenPy_Example>
+* [Tutorial how to use the tool is located on Steam](https://steamcommunity.com/sharedfiles/filedetails/?id=2074605023)
+* [Support Steam-thread](https://steamcommunity.com/app/1273620/discussions/0/2262439317604694498/)
+* [You can get more complicated example here](https://github.com/DeXP/dxDD2RenPy_Example)
+* [Or even run this example online](https://dexp.github.io/dxDD2RenPy_Example)
 
 ## Info
 
