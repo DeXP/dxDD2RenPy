@@ -83,6 +83,11 @@ namespace dxDD2RenPy.Convert
 
 		private void WriteVariables(string bornPath)
 		{
+			if(m_ProcessedVariables.Keys.Count < 1)
+			{
+				return;
+			}
+
 			string path = bornPath.Replace(".json", "") + "-all-variables.rpy";
 
 			m_Log.AppendLogLine($"Writing all variables to {Path.GetFileName(path)}");
