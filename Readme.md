@@ -28,7 +28,9 @@ Or even run this example online:
 
 This diagram will be translated by dxDD2RenPy into this scene (running in [Ren'Py](https://www.renpy.org/)):
 
-![dxDD2RenPy Example condition](https://raw.githubusercontent.com/DeXP/dxDD2RenPy/master/info/dxDD2RenPy_Example_screenshot0001.png)
+![dxDD2RenPy Example condition](https://raw.githubusercontent.com/DeXP/dxDD2RenPy/master/info/dxDD2RenPy_Example_screenshot0001.jpg)
+
+You can get the whole code in the example stated in the section above.
 
 ## Credits:
 Developed by Dmitry Hrabrov a.k.a. DeXPeriX and every direct or indirect contributor to the GitHub.
