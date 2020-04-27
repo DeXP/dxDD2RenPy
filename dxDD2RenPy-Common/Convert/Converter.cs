@@ -80,6 +80,7 @@ namespace dxDD2RenPy.Convert
 				m_CurrentLabelNode = m_Object.StartNode;
 				written += m_Writer.WriteLine($"label {m_Object.StartNode.StartName}:");
 				written += ProcessNode(m_Object.StartNode);
+				written += m_Writer.WriteLine("    return");
 
 				foreach (var node in labelNodes)
 				{
@@ -91,6 +92,7 @@ namespace dxDD2RenPy.Convert
 					DDNode nextNode = null;
 					written += ProcessSingleNode(node, ref nextNode);
 					written += ProcessNode(nextNode);
+					written += m_Writer.WriteLine("    return");
 				}
 			}
 

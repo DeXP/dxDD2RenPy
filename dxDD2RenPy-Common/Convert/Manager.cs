@@ -83,7 +83,7 @@ namespace dxDD2RenPy.Convert
 
 		private void WriteVariables(string bornPath)
 		{
-			if(m_ProcessedVariables.Keys.Count < 1)
+			if (m_ProcessedVariables.Keys.Count < 1)
 			{
 				return;
 			}
