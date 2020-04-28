@@ -1,5 +1,5 @@
 # dxDD2RenPy idea
-You may want to create you Visual Novel visually, in a diagram-like way. [Dialogue Designer](https://store.steampowered.com/app/1273620/Dialogue_Designer/) can help you to design dialogues visually. But it knows nothing about export to real exngines. dxDD2RenPy will help you to convert Dialogue Designer's JSON files into [Ren'Py](https://www.renpy.org/) code.
+You may want to create you Visual Novel game visually, in a diagram-like way. [Dialogue Designer](https://store.steampowered.com/app/1273620/Dialogue_Designer/) can help you to design dialogues visually. But it knows nothing about export to real engines. dxDD2RenPy will help you to convert Dialogue Designer's JSON files into [Ren'Py](https://www.renpy.org/) code.
 
 ![dxDD2RenPy screenshot](https://raw.githubusercontent.com/DeXP/dxDD2RenPy/master/info/screenshot.png)
 
