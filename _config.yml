@@ -1,2 +1,5 @@
 theme: jekyll-theme-midnight
 show_downloads: true
+github:
+  zip_url: https://github.com/DeXP/dxDD2RenPy/releases/latest
+  tar_url: https://github.com/DeXP/dxDD2RenPy/releases/latest
