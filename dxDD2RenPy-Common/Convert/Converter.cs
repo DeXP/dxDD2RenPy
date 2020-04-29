@@ -39,6 +39,11 @@ namespace dxDD2RenPy.Convert
 			m_Manager = manager;
 		}
 
+		public static string GetRpyName(string jsonFile)
+		{
+			return jsonFile.Replace(".json", ".rpy");
+		}
+
 		public int Load(string filename)
 		{
 			var dd = DDObject.Load(filename);

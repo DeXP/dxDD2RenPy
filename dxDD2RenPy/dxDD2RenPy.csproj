@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
     <ApplicationIcon>icon.ico</ApplicationIcon>
-    <Version>0.8.0</Version>
+    <Version>0.9.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <Compile Update="**\*.xaml.cs">

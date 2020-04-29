@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using dxDD2RenPy.Convert;
 using dxDD2RenPy.Helpers;
@@ -23,14 +24,44 @@ namespace dxDD2RenPy_Console
 			{
 				Console.WriteLine("Console version of dxDD2RenPy converter - the tool to convert Dialogue Designer JSON files into Ren'Py code.");
 				Console.WriteLine("Arguments:");
-				Console.WriteLine("  Path to the file to convert");
+				Console.WriteLine("  [-m] - Do file system monitoring (actual only for folder)");
+				Console.WriteLine("  path - Path to the file or folder to convert");
 			}
 			else
 			{
-				new Manager(new ConsoleLogger()).ProcessAll(args[0]);
+				bool startWatcher = false;
+
+				using (var manager = new Manager(new ConsoleLogger()))
+				{
+					foreach (var arg in args)
+					{
+						if (arg.StartsWith("-m"))
+						{
+							startWatcher = true;
+						}
+						else
+						{
+							string path = arg;
+
+							if (File.Exists(path))
+							{
+								manager.ProcessFile(path);
+							}
+							else
+							{
+								manager.ProcessAll(path, startWatcher);
+
+								if (true == startWatcher)
+								{
+									Console.WriteLine("Press 'q' to quit the application.");
+									while (Console.Read() != 'q') ;
+								}
+							}
+						}
+					}
+				}
 			}
 		}
-
 		
 	}
 }

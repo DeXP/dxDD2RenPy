@@ -253,13 +253,16 @@ namespace dxDD2RenPy.Convert
 		/// <returns>null if file is wrong</returns>
 		public static DDObject Load(string path)
 		{
-			using (StreamReader file = File.OpenText(path))
+			using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
 			{
-				JsonSerializer serializer = new JsonSerializer();
+				using (var file = new StreamReader(fileStream, System.Text.Encoding.Default))
+				{
+					JsonSerializer serializer = new JsonSerializer();
 
-				var ddList = (List<DDObject>)serializer.Deserialize(file, typeof(List<DDObject>));
+					var ddList = (List<DDObject>)serializer.Deserialize(file, typeof(List<DDObject>));
 
-				return ddList.FirstOrDefault();
+					return ddList.FirstOrDefault();
+				}
 			}
 		}
 

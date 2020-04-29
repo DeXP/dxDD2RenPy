@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>dxDD2RenPy_Common</RootNamespace>
-    <Version>0.8.0</Version>
+    <Version>0.9.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

@@ -9,7 +9,7 @@
 	<Grid Margin="10" ColumnDefinitions="*" RowDefinitions="Auto,Auto,*">
 
 		<Grid Margin="0,0,0,10" Grid.Row="0" Grid.Column="0" ColumnDefinitions="*, Auto" RowDefinitions="*">
-			<TextBox Grid.Row="0" Grid.Column="0" Name="inputFile" Watermark="Select the file to convert" Margin="0,0,10,0"/>
+			<TextBox Grid.Row="0" Grid.Column="0" Name="inputFolder" Watermark="Select project's root folder" Margin="0,0,10,0"/>
 			<Button Grid.Row="0" Grid.Column="1" Click="BrowseButton_Click" Padding="5,0,10,0">
 				<StackPanel Orientation="Horizontal">
 					<DrawingPresenter Width="20" Height="12" Margin="3,0">
