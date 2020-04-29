@@ -45,11 +45,11 @@ namespace dxDD2RenPy_Console
 
 							if (File.Exists(path))
 							{
-								manager.ProcessFile(path);
+								manager.StartFileProcess(path);
 							}
 							else
 							{
-								manager.ProcessAll(path, startWatcher);
+								manager.StartFolderProcess(path, startWatcher);
 
 								if (true == startWatcher)
 								{

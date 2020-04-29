@@ -80,7 +80,7 @@ namespace dxDD2RenPy
 			}
 
 			AppendLogLine($"Entry point: {m_InputFolderEdit.Text}");
-			m_ConvertManager.ProcessAll(m_InputFolderEdit.Text);
+			m_ConvertManager.StartFolderProcess(m_InputFolderEdit.Text);
 		}
 	}
 }

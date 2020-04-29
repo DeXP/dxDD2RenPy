@@ -13,6 +13,7 @@ namespace dxDD2RenPy.Convert
 		private HashSet<string> m_ProcessedCharacters = new HashSet<string>();
 		private Dictionary<string, DDVariable> m_ProcessedVariables = new Dictionary<string, DDVariable>();
 		private bool m_IsVariablesChanged = false;
+		private string m_RootPath = string.Empty;
 
 		private FileSystemWatcher m_FSWatcher;
 
@@ -23,10 +24,16 @@ namespace dxDD2RenPy.Convert
 			m_FSWatcher = new FileSystemWatcher();
 		}
 
-		public void ProcessAll(string path, bool startWatcher = true)
+		public void StartFolderProcess(string path, bool startWatcher = true)
 		{
-			ProcessFolder(path);
+			if (path.EndsWith(Path.DirectorySeparatorChar))
+			{
+				path = Path.GetDirectoryName(path);
+			}
 
+			m_RootPath = path;
+
+			ProcessFolder(path);
 			WriteVariables(path);
 
 			if (true == startWatcher)
@@ -119,6 +126,11 @@ namespace dxDD2RenPy.Convert
 			}
 		}
 
+		public void StartFileProcess(string path)
+		{
+			m_RootPath = Path.GetDirectoryName(path);
+		}
+
 		public void ProcessFile(string path)
 		{
 			if (m_ProcessedFiles.Contains(path))
@@ -164,7 +176,7 @@ namespace dxDD2RenPy.Convert
 
 			m_IsVariablesChanged = false;
 
-			string path = bornPath + Path.DirectorySeparatorChar + "all-game-variables.rpy";
+			string path = m_RootPath + Path.DirectorySeparatorChar + "all-game-variables.rpy";
 
 			m_Log.AppendLogLine($"Writing all variables to {Path.GetFileName(path)}");
 
