@@ -17,6 +17,10 @@ namespace dxDD2RenPy
 		private TextBox m_InputFolderEdit;
 		private TextBox m_Log;
 
+		private Button m_BrowseButton;
+		private Button m_ConvertButton;
+		private Button m_StopButton;
+
 		private Manager m_ConvertManager;
 
 		public MainWindow()
@@ -41,6 +45,10 @@ namespace dxDD2RenPy
 
 			m_InputFolderEdit = this.FindControl<TextBox>("inputFolder");
 			m_Log = this.FindControl<TextBox>("LogText");
+
+			m_BrowseButton = this.FindControl<Button>("browseButton");
+			m_ConvertButton = this.FindControl<Button>("convertButton");
+			m_StopButton = this.FindControl<Button>("stopButton");
 
 			string version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
 			this.Title += " " + version;		
@@ -80,7 +88,20 @@ namespace dxDD2RenPy
 			}
 
 			AppendLogLine($"Entry point: {m_InputFolderEdit.Text}");
-			m_ConvertManager.StartFolderProcess(m_InputFolderEdit.Text);
+			if( m_ConvertManager.StartFolderProcess(m_InputFolderEdit.Text) > 0)
+			{
+				m_StopButton.IsEnabled = true;
+				m_BrowseButton.IsEnabled = false;
+				m_ConvertButton.IsEnabled = false;
+			}
+		}
+
+		public void StopButton_Click(object sender, RoutedEventArgs e)
+		{
+			m_ConvertManager.StopWatcher();
+			m_StopButton.IsEnabled = false;
+			m_BrowseButton.IsEnabled = true;
+			m_ConvertButton.IsEnabled = true;
 		}
 	}
 }

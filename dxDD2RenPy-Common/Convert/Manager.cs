@@ -24,7 +24,7 @@ namespace dxDD2RenPy.Convert
 			m_FSWatcher = new FileSystemWatcher();
 		}
 
-		public void StartFolderProcess(string path, bool startWatcher = true)
+		public int StartFolderProcess(string path, bool startWatcher = true)
 		{
 			if (path.EndsWith(Path.DirectorySeparatorChar))
 			{
@@ -53,34 +53,59 @@ namespace dxDD2RenPy.Convert
 
 				m_Log.AppendLogLine("Your changes are now watched in real time");
 				m_FSWatcher.EnableRaisingEvents = true;
+
+				return 1;
 			}
+
+			return 0;
+		}
+
+		public void StopWatcher()
+		{
+			m_FSWatcher.EnableRaisingEvents = false;
+			m_Log.AppendLogLine("File system watcher is stopped");
+		}
+
+		private bool IsGoodLocation(string path)
+		{
+			string topFolder = Path.GetFileName(Path.GetDirectoryName(path));
+			return (false == topFolder.Equals("saves"));
 		}
 
 		private DateTime m_LastChangedTime = DateTime.MinValue;
 		private TimeSpan m_MinChangeDelta = TimeSpan.FromMilliseconds(500);
 
 		private void OnChanged(object source, FileSystemEventArgs e)
-		{
-			DateTime lastWriteTime = File.GetLastWriteTime(e.FullPath);
-
-			if (lastWriteTime - m_LastChangedTime > m_MinChangeDelta)
+		{	
+			if (IsGoodLocation(e.FullPath))
 			{
-				ConvertFile(e.FullPath);
-				WriteVariables(e.FullPath);
-				m_LastChangedTime = lastWriteTime;
+				DateTime lastWriteTime = File.GetLastWriteTime(e.FullPath);
+
+				if (lastWriteTime - m_LastChangedTime > m_MinChangeDelta)
+				{
+					ConvertFile(e.FullPath);
+					WriteVariables(e.FullPath);
+					m_LastChangedTime = lastWriteTime;
+				}
 			}
 		}
 
 		private void OnRenamed(object source, RenamedEventArgs e)
 		{
-			DeleteRpyFile(e.OldFullPath);
-			ConvertFile(e.FullPath);
-			WriteVariables(e.FullPath);
+			if (IsGoodLocation(e.OldFullPath))
+			{
+				DeleteRpyFile(e.OldFullPath);
+			}
+
+			OnChanged(source, e);
 		}
 
 		private void OnDeleted(object source, FileSystemEventArgs e)
 		{
-			DeleteRpyFile(e.FullPath);
+			if (IsGoodLocation(e.FullPath))
+			{
+				DeleteRpyFile(e.FullPath);
+			}
 		}
 
 		private void DeleteRpyFile(string jsonPath)
@@ -122,7 +147,10 @@ namespace dxDD2RenPy.Convert
 
 			foreach(var file in jsonFiles)
 			{
-				ProcessFile(file);
+				if (IsGoodLocation(file))
+				{
+					ProcessFile(file);
+				}
 			}
 		}
 

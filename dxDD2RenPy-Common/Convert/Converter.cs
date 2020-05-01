@@ -46,7 +46,18 @@ namespace dxDD2RenPy.Convert
 
 		public int Load(string filename)
 		{
-			var dd = DDObject.Load(filename);
+			DDObject dd = null;
+
+			try
+			{
+				dd = DDObject.Load(filename);
+			}
+			catch
+			{
+				// The file can be busy at the moment
+				System.Threading.Thread.Sleep(250);
+				dd = DDObject.Load(filename);
+			}
 
 			if (null == dd)
 			{
