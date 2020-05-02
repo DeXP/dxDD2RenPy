@@ -5,6 +5,8 @@ You may want to create you Visual Novel game visually, in a diagram-like way. [D
 
 dxDD2RenPy is a cross platform application. It works on: Windows, Linux, Mac OS X. Just run "exe" in the archive on your operation system.
 
+dxDD2RenPy will monitor your changes automatically, you do not need to alt-tab to the converter after each save in Dialogue Designer - rpy-files will be updated automatically while dxDD2RenPy is running.
+
 ## Get the tool:
 Download latest release: 
 <https://github.com/DeXP/dxDD2RenPy/releases/latest>
@@ -14,6 +16,7 @@ Download latest release:
 * [Support Steam-thread](https://steamcommunity.com/app/1273620/discussions/0/2262439317604694498/)
 * [You can get more complicated example here](https://github.com/DeXP/dxDD2RenPy_Example)
 * [Or even run this example online](https://dexp.github.io/dxDD2RenPy_Example)
+* [General Ren'Py tutorial](http://onemangaday.dexp.in/tutorials/simple-game-in-renpy.html)
 
 ## Info
 
