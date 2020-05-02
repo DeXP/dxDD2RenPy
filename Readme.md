@@ -32,9 +32,9 @@ You can get the whole code in the example stated in the section above.
 
 ## Third party
 
-* [Avalonia for UI](https://avaloniaui.net)
-* [Newtonsoft JSON for deserialization](https://www.newtonsoft.com/json)
-* [Font Awesome for UI icons](https://fontawesome.com)
+* [Avalonia UI](https://avaloniaui.net)
+* [Newtonsoft JSON](https://www.newtonsoft.com/json)
+* [Font Awesome](https://fontawesome.com)
 
 ## Credits:
 Developed by Dmitry Hrabrov a.k.a. DeXPeriX and every direct or indirect contributor to the GitHub.
