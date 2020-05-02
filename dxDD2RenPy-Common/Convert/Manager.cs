@@ -63,6 +63,11 @@ namespace dxDD2RenPy.Convert
 		public void StopWatcher()
 		{
 			m_FSWatcher.EnableRaisingEvents = false;
+
+			m_ProcessedFiles.Clear();
+			m_ProcessedCharacters.Clear();
+			m_ProcessedVariables.Clear();
+
 			m_Log.AppendLogLine("File system watcher is stopped");
 		}
 

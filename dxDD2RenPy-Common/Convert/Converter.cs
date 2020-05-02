@@ -206,8 +206,10 @@ namespace dxDD2RenPy.Convert
 
 		private int WriteSetNvlMode(bool isNvl, int level)
 		{
-			string nvlMode = isNvl ? "show" : "hide";
-			return m_Writer.WriteLine($"{GetPadding(level)}window {nvlMode}");
+			// Sorry nvl mode not supported yet
+			return 0;
+			// string nvlMode = isNvl ? "show" : "hide";
+			// return m_Writer.WriteLine($"{GetPadding(level)}window {nvlMode}");
 		}
 
 		private int WriteMessage(DDNode node, ref DDNode nextNode, int level, bool prevIsBox)
@@ -220,6 +222,20 @@ namespace dxDD2RenPy.Convert
 			int written = 0;
 			string padding = GetPadding(level);
 			string curText = node.GetText(node.text);
+			string quotedText;
+
+			if (curText.Contains("\n\n")
+				|| curText.Contains("\r\n\r\n")
+				|| curText.Contains($"{Environment.NewLine}{Environment.NewLine}"))
+			{
+				// Monologue mode
+				quotedText = $"\"\"\"{Environment.NewLine}{curText}{Environment.NewLine}\"\"\"";
+			}
+			else
+			{
+				// Normal text
+				quotedText = $"\"{curText}\"";
+			}
 
 			if (node.is_box != prevIsBox)
 			{
@@ -230,13 +246,13 @@ namespace dxDD2RenPy.Convert
 			{
 				string character = node.character[0];
 
-				if ("Player".Equals(character))
+				if ("Player".Equals(character) || string.IsNullOrEmpty(character))
 				{
-					written += m_Writer.WriteLine($"{padding}\"{curText}\"");
+					written += m_Writer.WriteLine($"{padding}{quotedText}");
 				}
 				else
 				{
-					written += m_Writer.WriteLine($"{padding}{character} \"{curText}\"");
+					written += m_Writer.WriteLine($"{padding}{character} {quotedText}");
 
 					m_Manager.ProcessCharacter(character);
 				}
