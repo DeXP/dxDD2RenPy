@@ -266,7 +266,7 @@ namespace dxDD2RenPy.Convert
 
 				if (false == string.IsNullOrEmpty(curText))
 				{
-					written += m_Writer.WriteLine($"{menuPadding}\"{curText}\"");
+					written += m_Writer.WriteLine($"{menuPadding}{quotedText}");
 				}
 
 				foreach (var choice in node.choices)

@@ -116,7 +116,24 @@ namespace dxDD2RenPy.Convert
 		{
 			get
 			{
-				return m_Owner.GetNode(next);
+				if (false == string.IsNullOrEmpty(next))
+				{
+					// Next node set directly in the "next" node field
+					return m_Owner.GetNode(next);
+				}
+				else
+				{
+					bool messageWithChoice = node_type.Equals("show_message") && (choices != null);
+
+					if (false == messageWithChoice)
+					{
+						// Find connection in the connections table
+						var connection = m_Owner.connections?.Where(n => node_name.Equals(n.from)).FirstOrDefault();
+						return m_Owner.GetNode(connection?.to);
+					}
+
+					return null;
+				}
 			}
 		}
 

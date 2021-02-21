@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
     <ApplicationIcon>icon.ico</ApplicationIcon>
-    <Version>0.9.0</Version>
+    <Version>0.9.1</Version>
   </PropertyGroup>
   <ItemGroup>
     <Compile Update="**\*.xaml.cs">
@@ -16,8 +16,8 @@
 		<AvaloniaResource Include="*.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.9.9" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.9.9" />
+    <PackageReference Include="Avalonia" Version="0.9.12" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.9.12" />
     <PackageReference Include="Dotnet.Bundle" Version="0.9.12" />
   </ItemGroup>
   <ItemGroup>
