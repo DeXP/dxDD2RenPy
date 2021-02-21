@@ -33,7 +33,6 @@ You can get the whole code in the example stated in the section above.
 ## Third party
 
 * [Avalonia UI](https://avaloniaui.net)
-* [Newtonsoft JSON](https://www.newtonsoft.com/json)
 * [Font Awesome](https://fontawesome.com)
 
 ## Credits:

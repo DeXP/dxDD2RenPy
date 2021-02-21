@@ -1,17 +1,17 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 
 namespace dxDD2RenPy.Convert
 {
 	public class DDConnection
 	{
 		public string from { get; set; }
-		public string from_port { get; set; }
+		public int from_port { get; set; }
 		public string to { get; set; }
-		public string to_port { get; set; }
+		public int to_port { get; set; }
 	}
 
 	public enum DDVarType
@@ -24,7 +24,7 @@ namespace dxDD2RenPy.Convert
 	public class DDVariable
 	{
 		public DDVarType type { get; set; }
-		public string value { get; set; }
+		public object value { get; set; }
 	}
 
 	public class DDChoice
@@ -49,7 +49,7 @@ namespace dxDD2RenPy.Convert
 
 		public float? time { get; set; }
 
-		public string value { get; set; }
+		public object value { get; set; }
 		public string var_name { get; set; }
 		public bool? toggle { get; set; }
 		public string operation_type { get; set; }
@@ -62,7 +62,7 @@ namespace dxDD2RenPy.Convert
 		public int chance_2 { get; set; }
 
 		public IList<int> expand_size { get; set; }
-		public IList<string> character { get; set; }
+		public IList<object> character { get; set; }
 		public IList<float> offset { get; set; }
 		public Object text { get; set; }
 		public IList<DDChoice> choices { get; set; }
@@ -169,19 +169,16 @@ namespace dxDD2RenPy.Convert
 		/// <returns>Text string</returns>
 		public string GetRawText(Object textObject)
 		{
-			if (textObject is Newtonsoft.Json.Linq.JObject jobj)
+			if (textObject is JsonElement jobj)
 			{
-				if (jobj.HasValues)
+				if (jobj.TryGetProperty(this.m_Owner.selected_language, out JsonElement languageElement))
 				{
-					if (jobj.ContainsKey(this.m_Owner.selected_language))
-					{
-						return jobj[this.m_Owner.selected_language].ToString();
-					}
-					else
-					{
-						return jobj[0].ToString();
-					}
+					return languageElement.ToString();
 				}
+				/*else
+				{
+					sum += 70;
+				}*/
 			}
 
 			return textObject.ToString();
@@ -198,8 +195,10 @@ namespace dxDD2RenPy.Convert
 
 			InputsCount = owner.nodes.Count(n => node_name.Equals(n.next))
 				+ owner.nodes.Count(n => n.choices?.Any(c => node_name.Equals(c.next)) ?? false)
-				+ owner.nodes.Count(n => (n.branches as Newtonsoft.Json.Linq.JObject)?.Children()
-					.Any(c => node_name.Equals(c.First().ToString())) ?? false);
+				+ owner.nodes.Count(n => (n.branches is JsonElement jBranches)? jBranches.EnumerateObject()
+					.Any(c => node_name.Equals(c.ToString())): false)
+				/*+ owner.nodes.Count(n => (n.branches as JsonElement)?.Children()
+					.Any(c => node_name.Equals(c.First().ToString())) ?? false)*/;
 		}
 	}
 
@@ -270,7 +269,7 @@ namespace dxDD2RenPy.Convert
 		/// <returns>null if file is wrong</returns>
 		public static DDObject Load(string path)
 		{
-			using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+			/*using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
 			{
 				using (var file = new StreamReader(fileStream, System.Text.Encoding.Default))
 				{
@@ -280,7 +279,10 @@ namespace dxDD2RenPy.Convert
 
 					return ddList.FirstOrDefault();
 				}
-			}
+			}*/
+			string jsonString = File.ReadAllText(path);
+			var ddList = JsonSerializer.Deserialize<List<DDObject>>(jsonString);
+			return ddList.FirstOrDefault();
 		}
 
 		/// <summary>
@@ -324,11 +326,11 @@ namespace dxDD2RenPy.Convert
 				}
 			}
 
-			if (curNode.branches is Newtonsoft.Json.Linq.JObject branches)
+			if (curNode.branches is JsonElement branches)
 			{
-				foreach(var branch in branches)
+				foreach (var branch in branches.EnumerateObject())
 				{
-					if (IsNodeInLoop(findNode, loopNode, GetNode(branch.Value.ToString()), false))
+					if (IsNodeInLoop(findNode, loopNode, GetNode(branch.ToString()), false))
 					{
 						return true;
 					}

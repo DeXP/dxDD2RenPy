@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Reflection;
 using dxDD2RenPy.Helpers;
 
@@ -244,7 +245,7 @@ namespace dxDD2RenPy.Convert
 
 			if (node.choices == null)
 			{
-				string character = node.character[0];
+				string character = node.character[0].ToString();
 
 				if ("Player".Equals(character) || string.IsNullOrEmpty(character))
 				{
@@ -327,18 +328,21 @@ namespace dxDD2RenPy.Convert
 				return 0;
 			}
 
-			if (node.branches is Newtonsoft.Json.Linq.JObject branches)
+			if (node.branches is JsonElement branches)
 			{
 				string padding = GetPadding(level);
 				int written = 0;
 
-				written += m_Writer.WriteLine($"{padding}if {node.text}:");
-				written += WritePassIfNeed(ProcessNode(m_Object.GetNode(branches["True"].ToString()), level + 1, prevIsBox), level + 1);
+				if (branches.TryGetProperty("True", out JsonElement trueElement))
+				{
+					written += m_Writer.WriteLine($"{padding}if {node.text}:");
+					written += WritePassIfNeed(ProcessNode(m_Object.GetNode(trueElement.ToString()), level + 1, prevIsBox), level + 1);
+				}
 
-				if (branches.ContainsKey("False"))
+				if (branches.TryGetProperty("False", out JsonElement falseElement))
 				{
 					written += m_Writer.WriteLine($"{padding}else:");
-					written += WritePassIfNeed(ProcessNode(m_Object.GetNode(branches["False"].ToString()), level + 1, prevIsBox), level + 1);
+					written += WritePassIfNeed(ProcessNode(m_Object.GetNode(falseElement.ToString()), level + 1, prevIsBox), level + 1);
 				}
 
 				nextNode = node.NextNode;
@@ -355,7 +359,7 @@ namespace dxDD2RenPy.Convert
 				return 0;
 			}
 
-			if (node.branches is Newtonsoft.Json.Linq.JObject branches)
+			if (node.branches is JsonElement branches)
 			{
 				string padding = GetPadding(level);
 				bool conditionWritten = false;
@@ -367,9 +371,9 @@ namespace dxDD2RenPy.Convert
 				{
 					string key = i.ToString();
 
-					if (branches.ContainsKey(key))
+					if (branches.TryGetProperty(key, out JsonElement caseNodeElement))
 					{
-						DDNode caseNode = m_Object.GetNode(branches[key].ToString());
+						DDNode caseNode = m_Object.GetNode(caseNodeElement.ToString());
 						string ifName = conditionWritten ? "elif" : "if";
 						conditionWritten = true;
 
@@ -392,18 +396,24 @@ namespace dxDD2RenPy.Convert
 				return 0;
 			}
 
-			if (node.branches is Newtonsoft.Json.Linq.JObject branches)
+			if (node.branches is JsonElement branches)
 			{
 				string padding = GetPadding(level);
 				int written = 0;
 
 				written += m_Writer.WriteLine($"{padding}$ {node.RandomName} = renpy.random.randint(1, 100)");
 
-				written += m_Writer.WriteLine($"{padding}if {node.RandomName} <= {node.chance_1}:");
-				written += WritePassIfNeed(ProcessNode(m_Object.GetNode(branches["1"].ToString()), level + 1, prevIsBox), level + 1);
+				if (branches.TryGetProperty("1", out JsonElement oneElement))
+				{
+					written += m_Writer.WriteLine($"{padding}if {node.RandomName} <= {node.chance_1}:");
+					written += WritePassIfNeed(ProcessNode(m_Object.GetNode(oneElement.ToString()), level + 1, prevIsBox), level + 1);
+				}
 
-				written += m_Writer.WriteLine($"{padding}else:");
-				written += WritePassIfNeed(ProcessNode(m_Object.GetNode(branches["2"].ToString()), level + 1, prevIsBox), level + 1);
+				if (branches.TryGetProperty("1", out JsonElement twoElement))
+				{
+					written += m_Writer.WriteLine($"{padding}else:");
+					written += WritePassIfNeed(ProcessNode(m_Object.GetNode(twoElement.ToString()), level + 1, prevIsBox), level + 1);
+				}
 
 				nextNode = node.NextNode;
 				return written;
@@ -441,7 +451,7 @@ namespace dxDD2RenPy.Convert
 
 			int written = 0;
 			string pad = GetPadding(level);
-			string varValue = node.EscapeString(node.value);
+			string varValue = node.EscapeString(node.value.ToString());
 			DDVarType varType = DDVarType.String;
 
 			if (m_Object.variables.ContainsKey(node.var_name)) 
