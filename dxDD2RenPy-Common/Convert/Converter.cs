@@ -192,7 +192,8 @@ namespace dxDD2RenPy.Convert
 
 		private int WriteHeader()
 		{
-			string version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+			string version = Assembly.GetEntryAssembly().GetName().Version.ToString();
+			string url = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyCopyrightAttribute>().Copyright;
 			int written = 0;
 			written += m_Writer.WriteLine($"#");
 			written += m_Writer.WriteLine($"# dxDD2RenPy {version} by DeXPeriX");
@@ -200,7 +201,7 @@ namespace dxDD2RenPy.Convert
 			written += m_Writer.WriteLine($"# Generation date: {DateTime.Now}");
 			written += m_Writer.WriteLine($"# Please do not edit the file manually");
 			written += m_Writer.WriteLine($"# All changes will be lost after regeneration");
-			written += m_Writer.WriteLine($"# You can find more info about dxDD2RenPy on https://dexp.in/dxDD2RenPy");
+			written += m_Writer.WriteLine($"# You can find more info about dxDD2RenPy on {url}");
 			written += m_Writer.WriteLine($"#");
 			return written;
 		}

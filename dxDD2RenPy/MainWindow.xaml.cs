@@ -50,7 +50,7 @@ namespace dxDD2RenPy
 			m_ConvertButton = this.FindControl<Button>("convertButton");
 			m_StopButton = this.FindControl<Button>("stopButton");
 
-			string version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+			string version = Assembly.GetEntryAssembly().GetName().Version.ToString();
 			this.Title += " " + version;		
 		}
 

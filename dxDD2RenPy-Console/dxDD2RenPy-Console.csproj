@@ -1,11 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>dxDD2RenPy_Console</RootNamespace>
-    <Version>0.9.2</Version>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\dxDD2RenPy-Common\Properties\Version.cs" Link="Properties\Version.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\dxDD2RenPy-Common\dxDD2RenPy-Common.csproj" />

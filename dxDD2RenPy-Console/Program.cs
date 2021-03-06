@@ -18,14 +18,17 @@ namespace dxDD2RenPy_Console
 
 		static void Main(string[] args)
 		{
-			Console.WriteLine("dxDD2RenPy-Console {0}", Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion);
+			var assembly = Assembly.GetEntryAssembly();
+
+			Console.WriteLine("{0} {1}", assembly.GetName().Name, assembly.GetName().Version);
 
 			if (args.Length < 1)
 			{
-				Console.WriteLine("Console version of dxDD2RenPy converter - the tool to convert Dialogue Designer JSON files into Ren'Py code.");
+				Console.WriteLine(assembly.GetCustomAttribute<AssemblyDescriptionAttribute>().Description);
 				Console.WriteLine("Arguments:");
 				Console.WriteLine("  [-m] - Do file system monitoring (actual only for folder)");
 				Console.WriteLine("  path - Path to the file or folder to convert");
+				Console.WriteLine("More info on: {0}", assembly.GetCustomAttribute<AssemblyCopyrightAttribute>().Copyright);
 			}
 			else
 			{
