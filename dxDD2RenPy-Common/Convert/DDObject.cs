@@ -175,10 +175,14 @@ namespace dxDD2RenPy.Convert
 				{
 					return languageElement.ToString();
 				}
-				/*else
+				else if (jobj.TryGetProperty("ENG", out JsonElement engElement))
 				{
-					sum += 70;
-				}*/
+					return engElement.ToString();
+				}
+				else
+				{
+					return textObject.ToString();
+				}
 			}
 
 			return textObject.ToString();
@@ -196,9 +200,7 @@ namespace dxDD2RenPy.Convert
 			InputsCount = owner.nodes.Count(n => node_name.Equals(n.next))
 				+ owner.nodes.Count(n => n.choices?.Any(c => node_name.Equals(c.next)) ?? false)
 				+ owner.nodes.Count(n => (n.branches is JsonElement jBranches)? jBranches.EnumerateObject()
-					.Any(c => node_name.Equals(c.ToString())): false)
-				/*+ owner.nodes.Count(n => (n.branches as JsonElement)?.Children()
-					.Any(c => node_name.Equals(c.First().ToString())) ?? false)*/;
+					.Any(c => node_name.Equals(c.ToString())): false);
 		}
 	}
 
@@ -269,17 +271,6 @@ namespace dxDD2RenPy.Convert
 		/// <returns>null if file is wrong</returns>
 		public static DDObject Load(string path)
 		{
-			/*using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-			{
-				using (var file = new StreamReader(fileStream, System.Text.Encoding.Default))
-				{
-					JsonSerializer serializer = new JsonSerializer();
-
-					var ddList = (List<DDObject>)serializer.Deserialize(file, typeof(List<DDObject>));
-
-					return ddList.FirstOrDefault();
-				}
-			}*/
 			string jsonString = File.ReadAllText(path);
 			var ddList = JsonSerializer.Deserialize<List<DDObject>>(jsonString);
 			return ddList.FirstOrDefault();
